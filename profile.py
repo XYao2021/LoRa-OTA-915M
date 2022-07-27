@@ -168,8 +168,8 @@ def x310_node_pair(x310_radio_name, node_type):
     node.hardware_type = node_type
     node.disk_image = DISK_IMAGE
 
-    #node.addService(pg.Execute(shell="bash",
-    #                           command=STARTUP_SCRIPT))
+    node.addService(pg.Execute(shell="bash",
+                               command=STARTUP_SCRIPT))
 
     node_radio_if = node.addInterface("usrp_if")
     node_radio_if.addAddress(pg.IPv4Address("192.168.40.1",
@@ -194,16 +194,16 @@ for fesite in params.fe_radio_sites:
     nuc.component_manager_id = fesite.site
     nuc.component_id = "nuc2"
     nuc.disk_image = DISK_IMAGE
-    #nuc.addService(pg.Execute(shell="bash",
-    #                          command=STARTUP_SCRIPT))
+    nuc.addService(pg.Execute(shell="bash",
+                              command=STARTUP_SCRIPT))
 
 # Request ed1+B210 radio resources on all ME units (shuttles).
 if params.alloc_shuttles:
     allroutes = request.requestAllRoutes()
     allroutes.disk_image = DISK_IMAGE
-    #allroutes.addService(pg.Execute(shell="bash",
-    #                                command=STARTUP_SCRIPT))
-    
+    allroutes.addService(pg.Execute(shell="bash",
+                                    command=STARTUP_SCRIPT))
+
 # Request frequency range(s)
 for frange in params.cbrs_freq_ranges:
     request.requestSpectrum(frange.freq_min, frange.freq_max, 0)
