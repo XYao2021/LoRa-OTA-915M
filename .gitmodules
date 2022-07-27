@@ -1,0 +1,3 @@
+[submodule "gr_lora_sdr_powder"]
+	path = gr_lora_sdr_powder
+	url = https://gitlab.flux.utah.edu/Jie_Wang/gr_lora_sdr_powder.git
