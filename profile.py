@@ -116,7 +116,7 @@ portal.context.defineStructParameter(
 portal.context.defineStructParameter(
     "cbrs_freq_ranges", "CBRS Frequency Ranges", [],
     multiValue=True,
-    min=0,
+    min=1,
     multiValueTitle="Frequency ranges for CBRS operation.",
     members=[
         portal.Parameter(
