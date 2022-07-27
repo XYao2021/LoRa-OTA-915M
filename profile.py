@@ -156,6 +156,9 @@ for i, frange in enumerate(params.cbrs_freq_ranges):
         
 pc.verifyParameters()
 
+# Create a Request object to start building the RSpec.
+request = pc.makeRequestRSpec()
+
 # Helper function that allocates a PC + X310 radio pair, with Ethernet
 # link between them.
 def x310_node_pair(x310_radio_name, node_type):
@@ -165,20 +168,17 @@ def x310_node_pair(x310_radio_name, node_type):
     node.hardware_type = node_type
     node.disk_image = DISK_IMAGE
 
-    #node.addService(rspec.Execute(shell="bash",
-    #                              command=STARTUP_SCRIPT))
+    #node.addService(pg.Execute(shell="bash",
+    #                           command=STARTUP_SCRIPT))
 
     node_radio_if = node.addInterface("usrp_if")
-    node_radio_if.addAddress(rspec.IPv4Address("192.168.40.1",
-                                               "255.255.255.0"))
+    node_radio_if.addAddress(pg.IPv4Address("192.168.40.1",
+                                            "255.255.255.0"))
     radio_link.addInterface(node_radio_if)
 
     radio = request.RawPC("%s-radio" % x310_radio_name)
     radio.component_id = x310_radio_name
     radio_link.addNode(radio)
-
-# Create a Request object to start building the RSpec.
-request = pc.makeRequestRSpec()
 
 # Request PC + CBRS X310 resource pairs.
 for rsite in params.cbrs_radio_sites:
@@ -194,19 +194,19 @@ for fesite in params.fe_radio_sites:
     nuc.component_manager_id = fesite.site
     nuc.component_id = "nuc2"
     nuc.disk_image = DISK_IMAGE
-    #nuc.addService(rspec.Execute(shell="bash",
-    #                             command=STARTUP_SCRIPT))
+    #nuc.addService(pg.Execute(shell="bash",
+    #                          command=STARTUP_SCRIPT))
 
 # Request ed1+B210 radio resources on all ME units (shuttles).
 if params.alloc_shuttles:
     allroutes = request.requestAllRoutes()
     allroutes.disk_image = DISK_IMAGE
-    #allroutes.addService(rspec.Execute(shell="bash",
-    #                                   command=STARTUP_SCRIPT))
+    #allroutes.addService(pg.Execute(shell="bash",
+    #                                command=STARTUP_SCRIPT))
     
 # Request frequency range(s)
 for frange in params.cbrs_freq_ranges:
     request.requestSpectrum(frange.freq_min, frange.freq_max, 0)
-    
+
 # Print the RSpec to the enclosing page.
 pc.printRequestRSpec()
