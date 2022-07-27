@@ -17,7 +17,7 @@ import geni.rspec.emulab.spectrum as spectrum
 
 # Resource strings
 DISK_IMAGE = "urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-GR38-PACK"
-STARTUP_SCRIPT = "/local/repository/bin/start.sh"
+STARTUP_SCRIPT = "/local/repository/bin/startup.sh"
 
 # List of CBRS rooftop X310 radios.
 cbrs_radios = [
