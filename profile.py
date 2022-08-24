@@ -143,6 +143,13 @@ portal.context.defineStructParameter(
             fe_sites[0], fe_sites,
             longDescription="A `nuc2` device will be selected at the site."
         ),
+        portal.Parameter(
+            "device",
+            "NUC Device",
+            portal.ParameterType.STRING,
+            "nuc2", ("nuc1", "nuc2"),
+            longDescription="Select which NUC device+radio to use at the site."
+        )
     ])
 
 # Frequency/spectrum parameters
@@ -233,7 +240,7 @@ for fesite in params.fe_radio_sites:
             nuc = request.RawPC("%s-b210" % sname)
             break
     nuc.component_manager_id = fesite.site
-    nuc.component_id = "nuc2"
+    nuc.component_id = fesite.device
     nuc.disk_image = DISK_IMAGE
     nuc.addService(pg.Execute(shell="bash",
                               command=STARTUP_SCRIPT))
