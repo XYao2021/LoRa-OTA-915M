@@ -65,6 +65,22 @@ fe_sites = [
      "WEB"),
 ]
 
+# List of CBRS rooftop X310 radios.
+dense_radios = [
+    ("cnode-wasatch",
+     "Wasatch"),
+    ("cnode-mario",
+     "Mario"),
+    ("cnode-moran",
+     "Moran"),
+    ("cnode-guesthouse",
+     "Guesthouse"),
+    ("cnode-ebc",
+     "EBC"),
+    ("cnode-ustar",
+     "USTAR"),
+]
+
 #
 # Profile parameters.
 #
@@ -93,6 +109,22 @@ portal.context.defineStructParameter(
             portal.ParameterType.STRING,
             cbrs_radios[0], cbrs_radios,
             longDescription="CBRS X310 radio will be allocated from selected site."
+        ),
+    ])
+
+# Set of OTA Lab NUC+B210 devices to allocate
+portal.context.defineStructParameter(
+    "dense_radios", "Dense Site Radios", [],
+    multiValue=True,
+    min=0,
+    multiValueTitle="Dense Site SFF+B210 radios to allocate.",
+    members=[
+        portal.Parameter(
+            "device",
+            "SFF Compute + NI B210 device",
+            portal.ParameterType.STRING,
+            dense_radios[0], dense_radios,
+            longDescription="A Small Form Factor compute with attached NI B210 device at the given Dense Deployment site will be allocated."
         ),
     ])
 
@@ -183,6 +215,14 @@ def x310_node_pair(x310_radio_name, node_type):
 # Request PC + CBRS X310 resource pairs.
 for rsite in params.cbrs_radio_sites:
     x310_node_pair(rsite.radio, params.nodetype)
+
+# Request NUC+B210 radio resources at the requested Dense Deployment sites.
+for ddsite in params.dense_radios:
+    node = request.RawPC("%s-dd-b210" % ddsite.device)
+    node.component_id = ddsite.device
+    node.disk_image = DISK_IMAGE
+    node.addService(pg.Execute(shell="bash",
+                              command=STARTUP_SCRIPT))
 
 # Request nuc2+B210 radio resources at FE sites.
 for fesite in params.fe_radio_sites:
