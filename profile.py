@@ -7,6 +7,7 @@ This profile allows for flexible instantiation of LoRa experiments on the POWDER
 
 Instructions:
 TODO.
+<https://gitlab.flux.utah.edu/Jie_Wang/gr_lora_sdr_powder>
 """
 
 import geni.portal as portal
