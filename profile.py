@@ -98,36 +98,36 @@ portal.context.defineParameter(
 )
 
 # Set of CBRS X310 radios to allocate
-portal.context.defineStructParameter(
-    "cbrs_radio_sites", "CBRS Radio Sites", [],
-    multiValue=True,
-    min=0,
-    multiValueTitle="CBRS roofotp X310 radios to allocate.",
-    members=[
-        portal.Parameter(
-            "radio",
-            "CBRS Radio Site",
-            portal.ParameterType.STRING,
-            cbrs_radios[0], cbrs_radios,
-            longDescription="CBRS X310 radio will be allocated from selected site."
-        ),
-    ])
+# portal.context.defineStructParameter(
+#     "cbrs_radio_sites", "CBRS Radio Sites", [],
+#     multiValue=True,
+#     min=0,
+#     multiValueTitle="CBRS roofotp X310 radios to allocate.",
+#     members=[
+#         portal.Parameter(
+#             "radio",
+#             "CBRS Radio Site",
+#             portal.ParameterType.STRING,
+#             cbrs_radios[0], cbrs_radios,
+#             longDescription="CBRS X310 radio will be allocated from selected site."
+#         ),
+#     ])
 
 # Set of OTA Lab NUC+B210 devices to allocate
-portal.context.defineStructParameter(
-    "dense_radios", "Dense Site Radios", [],
-    multiValue=True,
-    min=0,
-    multiValueTitle="Dense Site SFF+B210 radios to allocate.",
-    members=[
-        portal.Parameter(
-            "device",
-            "SFF Compute + NI B210 device",
-            portal.ParameterType.STRING,
-            dense_radios[0], dense_radios,
-            longDescription="A Small Form Factor compute with attached NI B210 device at the given Dense Deployment site will be allocated."
-        ),
-    ])
+# portal.context.defineStructParameter(
+#     "dense_radios", "Dense Site Radios", [],
+#     multiValue=True,
+#     min=0,
+#     multiValueTitle="Dense Site SFF+B210 radios to allocate.",
+#     members=[
+#         portal.Parameter(
+#             "device",
+#             "SFF Compute + NI B210 device",
+#             portal.ParameterType.STRING,
+#             dense_radios[0], dense_radios,
+#             longDescription="A Small Form Factor compute with attached NI B210 device at the given Dense Deployment site will be allocated."
+#         ),
+#     ])
 
 # Set of Fixed Endpoint devices to allocate
 portal.context.defineStructParameter(
@@ -153,27 +153,27 @@ portal.context.defineStructParameter(
     ])
 
 # Frequency/spectrum parameters
-portal.context.defineStructParameter(
-    "cbrs_freq_ranges", "CBRS Frequency Ranges", [],
-    multiValue=True,
-    min=1,
-    multiValueTitle="Frequency ranges for CBRS operation.",
-    members=[
-        portal.Parameter(
-            "freq_min",
-            "Frequency Min",
-            portal.ParameterType.BANDWIDTH,
-            3550.0,
-            longDescription="Values are rounded to the nearest kilohertz."
-        ),
-        portal.Parameter(
-            "freq_max",
-            "Frequency Max",
-            portal.ParameterType.BANDWIDTH,
-            3560.0,
-            longDescription="Values are rounded to the nearest kilohertz."
-        ),
-    ])
+# portal.context.defineStructParameter(
+#     "cbrs_freq_ranges", "CBRS Frequency Ranges", [],
+#     multiValue=True,
+#     min=1,
+#     multiValueTitle="Frequency ranges for CBRS operation.",
+#     members=[
+#         portal.Parameter(
+#             "freq_min",
+#             "Frequency Min",
+#             portal.ParameterType.BANDWIDTH,
+#             3550.0,
+#             longDescription="Values are rounded to the nearest kilohertz."
+#         ),
+#         portal.Parameter(
+#             "freq_max",
+#             "Frequency Max",
+#             portal.ParameterType.BANDWIDTH,
+#             3560.0,
+#             longDescription="Values are rounded to the nearest kilohertz."
+#         ),
+#     ])
 
 portal.context.defineStructParameter(
     "ISM_range", "ISM Frequency Ranges", [],
@@ -207,9 +207,9 @@ params = portal.context.bindParameters()
 
 # TODO: Check to ensure devices and frequencies were selected.
 
-for i, frange in enumerate(params.cbrs_freq_ranges):
-    if frange.freq_min < 3400 or frange.freq_min > 3800 \
-       or frange.freq_max < 3400 or frange.freq_max > 3800:
+for i, frange in enumerate(params.ISM_range):
+    if frange.freq_min < 902 or frange.freq_min > 928 \
+       or frange.freq_max < 902 or frange.freq_max > 928:
         perr = portal.ParameterError("CBAND/CBRS frequencies must be between 3400 and 3800 MHz", ["cbrs_freq_ranges[%d].freq_min" % i, "cbrs_freq_ranges[%d].freq_max" % i])
         portal.context.reportError(perr)
     if frange.freq_max - frange.freq_min < 1:
@@ -223,28 +223,28 @@ request = pc.makeRequestRSpec()
 
 # Helper function that allocates a PC + X310 radio pair, with Ethernet
 # link between them.
-def x310_node_pair(x310_radio_name, node_type):
-    radio_link = request.Link("%s-link" % x310_radio_name)
+# def x310_node_pair(x310_radio_name, node_type):
+#     radio_link = request.Link("%s-link" % x310_radio_name)
 
-    node = request.RawPC("%s-comp" % x310_radio_name)
-    node.hardware_type = node_type
-    node.disk_image = DISK_IMAGE
+#     node = request.RawPC("%s-comp" % x310_radio_name)
+#     node.hardware_type = node_type
+#     node.disk_image = DISK_IMAGE
 
-    node.addService(pg.Execute(shell="bash",
-                               command=STARTUP_SCRIPT))
+#     node.addService(pg.Execute(shell="bash",
+#                                command=STARTUP_SCRIPT))
 
-    node_radio_if = node.addInterface("usrp_if")
-    node_radio_if.addAddress(pg.IPv4Address("192.168.40.1",
-                                            "255.255.255.0"))
-    radio_link.addInterface(node_radio_if)
+#     node_radio_if = node.addInterface("usrp_if")
+#     node_radio_if.addAddress(pg.IPv4Address("192.168.40.1",
+#                                             "255.255.255.0"))
+#     radio_link.addInterface(node_radio_if)
 
-    radio = request.RawPC("%s-radio" % x310_radio_name)
-    radio.component_id = x310_radio_name
-    radio_link.addNode(radio)
+#     radio = request.RawPC("%s-radio" % x310_radio_name)
+#     radio.component_id = x310_radio_name
+#     radio_link.addNode(radio)
 
-# Request PC + CBRS X310 resource pairs.
-for rsite in params.cbrs_radio_sites:
-    x310_node_pair(rsite.radio, params.nodetype)
+# # Request PC + CBRS X310 resource pairs.
+# for rsite in params.cbrs_radio_sites:
+#     x310_node_pair(rsite.radio, params.nodetype)
 
 # Request NUC+B210 radio resources at the requested Dense Deployment sites.
 for ddsite in params.dense_radios:
@@ -275,7 +275,7 @@ if params.alloc_shuttles:
                                     command=STARTUP_SCRIPT))
 
 # Request frequency range(s)
-for frange in params.cbrs_freq_ranges:
+for frange in params.ISM_range:
     request.requestSpectrum(frange.freq_min, frange.freq_max, 0)
 
 # Print the RSpec to the enclosing page.
