@@ -21,26 +21,26 @@ DISK_IMAGE = "urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU22-64-GR310"
 STARTUP_SCRIPT = "/local/repository/bin/startup.sh"
 
 # List of CBRS rooftop X310 radios.
-cbrs_radios = [
-    ("cbrssdr1-bes",
-     "Behavioral"),
-    ("cbrssdr1-browning",
-     "Browning"),
-    ("cbrssdr1-dentistry",
-     "Dentistry"),
-    ("cbrssdr1-fm",
-     "Friendship Manor"),
-    ("cbrssdr1-hospital",
-     "Hospital"),
-    ("cbrssdr1-honors",
-     "Honors"),
-    ("cbrssdr1-meb",
-     "MEB"),
-    ("cbrssdr1-smt",
-     "SMT"),
-    ("cbrssdr1-ustar",
-     "USTAR"),
-]
+# cbrs_radios = [
+#     ("cbrssdr1-bes",
+#      "Behavioral"),
+#     ("cbrssdr1-browning",
+#      "Browning"),
+#     ("cbrssdr1-dentistry",
+#      "Dentistry"),
+#     ("cbrssdr1-fm",
+#      "Friendship Manor"),
+#     ("cbrssdr1-hospital",
+#      "Hospital"),
+#     ("cbrssdr1-honors",
+#      "Honors"),
+#     ("cbrssdr1-meb",
+#      "MEB"),
+#     ("cbrssdr1-smt",
+#      "SMT"),
+#     ("cbrssdr1-ustar",
+#      "USTAR"),
+# ]
 
 # A list of fixed endpoint sites.
 fe_sites = [
@@ -67,20 +67,20 @@ fe_sites = [
 ]
 
 # List of CBRS rooftop X310 radios.
-dense_radios = [
-    ("cnode-wasatch",
-     "Wasatch"),
-    ("cnode-mario",
-     "Mario"),
-    ("cnode-moran",
-     "Moran"),
-    ("cnode-guesthouse",
-     "Guesthouse"),
-    ("cnode-ebc",
-     "EBC"),
-    ("cnode-ustar",
-     "USTAR"),
-]
+# dense_radios = [
+#     ("cnode-wasatch",
+#      "Wasatch"),
+#     ("cnode-mario",
+#      "Mario"),
+#     ("cnode-moran",
+#      "Moran"),
+#     ("cnode-guesthouse",
+#      "Guesthouse"),
+#     ("cnode-ebc",
+#      "EBC"),
+#     ("cnode-ustar",
+#      "USTAR"),
+# ]
 
 #
 # Profile parameters.
@@ -210,10 +210,10 @@ params = portal.context.bindParameters()
 for i, frange in enumerate(params.ISM_range):
     if frange.freq_min < 902 or frange.freq_min > 928 \
        or frange.freq_max < 902 or frange.freq_max > 928:
-        perr = portal.ParameterError("CBAND/CBRS frequencies must be between 3400 and 3800 MHz", ["cbrs_freq_ranges[%d].freq_min" % i, "cbrs_freq_ranges[%d].freq_max" % i])
+        perr = portal.ParameterError("CBAND/CBRS frequencies must be between 902 and 928 MHz")
         portal.context.reportError(perr)
     if frange.freq_max - frange.freq_min < 1:
-        perr = portal.ParameterError("Minimum and maximum frequencies must be separated by at least 1 MHz", ["cbrs_freq_ranges[%d].freq_min" % i, "cbrs_freq_ranges[%d].freq_max" % i])
+        perr = portal.ParameterError("Minimum and maximum frequencies must be separated by at least 1 MHz")
         portal.context.reportError(perr)
         
 pc.verifyParameters()
@@ -247,12 +247,12 @@ request = pc.makeRequestRSpec()
 #     x310_node_pair(rsite.radio, params.nodetype)
 
 # Request NUC+B210 radio resources at the requested Dense Deployment sites.
-for ddsite in params.dense_radios:
-    node = request.RawPC("%s-dd-b210" % ddsite.device)
-    node.component_id = ddsite.device
-    node.disk_image = DISK_IMAGE
-    node.addService(pg.Execute(shell="bash",
-                              command=STARTUP_SCRIPT))
+# for ddsite in params.dense_radios:
+#     node = request.RawPC("%s-dd-b210" % ddsite.device)
+#     node.component_id = ddsite.device
+#     node.disk_image = DISK_IMAGE
+#     node.addService(pg.Execute(shell="bash",
+#                               command=STARTUP_SCRIPT))
 
 # Request nuc2+B210 radio resources at FE sites.
 for fesite in params.fe_radio_sites:
