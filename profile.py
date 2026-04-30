@@ -175,6 +175,28 @@ portal.context.defineStructParameter(
         ),
     ])
 
+portal.context.defineStructParameter(
+    "ISM_range", "ISM Frequency Ranges", [],
+    multiValue=True,
+    min=1,
+    multiValueTitle="Frequency ranges for ISM operation.",
+    members=[
+        portal.Parameter(
+            "freq_min",
+            "Frequency Min",
+            portal.ParameterType.BANDWIDTH,
+            902.0,
+            longDescription="Values are rounded to the nearest kilohertz."
+        ),
+        portal.Parameter(
+            "freq_max",
+            "Frequency Max",
+            portal.ParameterType.BANDWIDTH,
+            928.0,
+            longDescription="Values are rounded to the nearest kilohertz."
+        ),
+    ])
+
 portal.context.defineParameter(
     "alloc_shuttles", 
     "Allocate all routes (mobile endpoints)",
